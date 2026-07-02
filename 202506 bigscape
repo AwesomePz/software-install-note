@@ -1,0 +1,14 @@
+# 外网 2025.6
+# 官网下载：https://github.com/medema-group/BiG-SCAPE/wiki/01.-Installing-and-Running-BiG-SCAPE
+# 使用教程：https://github.com/medema-group/BiG-SCAPE/wiki/02.-BiG-SCAPE-Workflows
+
+cd software/
+git clone https://github.com/medema-group/BiG-SCAPE bigscape
+cd bigscape
+mamba env create -f environment.yml
+mamba activate bigscape
+pip install .
+#如果报错Disk quota exceeded，运行"pip cache purge"
+
+#验证安装
+bigscape --version
