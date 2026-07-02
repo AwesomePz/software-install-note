@@ -1,0 +1,19 @@
+# 外网 2025.7
+# 官网下载：https://github.com/soedinglab/MMseqs2/wiki#installation
+
+cd software/
+mkdir mmseqs
+# 检查系统版本
+[ $(uname -m) = "x86_64" ] && echo "64bit: Yes" || echo "64bit: No" #输出yes
+grep -q avx2 /proc/cpuinfo && echo "AVX2: Yes" || echo "AVX2: No" #输出yes
+grep -q sse4_1 /proc/cpuinfo && echo "SSE4.1: Yes" || echo "SSE4.1: No" #输出yes
+grep -q sse2 /proc/cpuinfo && echo "SSE2: Yes" || echo "SSE2: No" #输出yes
+wget -c https://mmseqs.com/latest/mmseqs-linux-avx2.tar.gz 
+tar -xvzf mmseqs-linux-avx2.tar.gz --strip-components=1 -C mmseqs
+mv mmseqs-linux-avx2.tar.gz mmseqs
+vim ~/.bashrc
+# 将以下内容添加至~/.bashrc
+# MMseqs2
+export PATH=/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mmseqs/bin/:$PATH
+##
+source ~/.bashrc
