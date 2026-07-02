@@ -1,0 +1,4 @@
+# 2026.3
+# 官网下载：https://github.com/ParBLiSS/FastANI
+cd software/
+mamba install -c bioconda FastANI
