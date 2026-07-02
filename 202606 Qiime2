@@ -1,0 +1,19 @@
+# 外网 2026.6
+# 官方下载：https://library.qiime2.org/quickstart/qiime2
+# 有关qiime2 2026.4训练silva138.2数据库的问答：https://forum.qiime2.org/t/make-qiime2-2026-4-compatible-with-classifiers-made-with-sklearn-version-1-4-2/34176/2
+# 有关qiime2 2026.4训练unite 10.0数据库的问答:https://forum.qiime2.org/t/pre-trained-unite-its-classifiers-for-qiime-2026-4-and-scikit-learn-1-7-1/24140
+
+cd software/
+mkdir qiime2 && cd qiime2/
+复制https://github.com/qiime2/distributions/blob/dev/2026.4/qiime2/released/rachis-qiime2-linux-64-conda.yml
+conda create -n qiime2 -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda -c https://packages.qiime2.org/qiime2/2026.4/qiime2/released --override-channels --file rachis-qiime2-linux-64-conda.yml
+conda activate qiime2
+conda install fastp
+conda install -c conda-forge r-vegan r-ggplot2 r-reshape2 r-dplyr r-tidyr r-ape r-gridextra r-rcolorbrewer r-ape
+
+# 下载数据库
+wget -c https://bwsyncandshare.kit.edu/public.php/dav/files/zK5zjAbsTFQRpbo/q2_26-4/Silva_138_2/full_classifier.qz #网友自训练的silva138.2，支持qiime2 2026.4版本；等待后续qiime2官方训练版本发布后替换。现在已训练的silva138.2最高支持qiime2 2026.1版本
+wget -c https://github.com/colinbrislawn/unite-train/releases/download/v10.0-2025-02-19-qiime2-2026.4/unite_ver2025-02-19_99_fungi-Q2-2026.4.qza #网友自训练的unite 10.0，支持qiime2 2026.4版本；等待后续qiime2官方训练版本发布后替换
+
+# 验证安装
+qiime info
