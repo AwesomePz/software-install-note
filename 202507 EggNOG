@@ -1,0 +1,24 @@
+# 外网 2025.7
+# 官网下载：https://github.com/eggnogdb/eggnog-mapper/wiki
+# 参考下载：https://zhuanlan.zhihu.com/p/1893113315800105084
+
+cd software/
+mamba env create -n eggnog python=3.7
+mamba activate eggnog
+pip install -U pip setuptools wheel -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install --no-cache-dir eggnog-mapper -i https://pypi.tuna.tsinghua.edu.cn/simple
+mkdir eggnog
+vim ~/.bashrc
+# 将以下内容添加至~/.bashrc
+# eggNOG-mapper
+export PATH=/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/eggnog:/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/eggnog/eggnogmapper/bin:"$PATH"
+export EGGNOG_DATA_DIR=/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/eggnog
+##
+# 下载数据库，完整数据库列表见http://eggnog5.embl.de/#/app/downloads
+nohup download_eggnog_data.py -y -P -M 2>&1 > ./eggnog/nohup.out & #下载main annotation database、taxa database、PFAM database、MMseqs2 database
+nohup download_eggnog_data.py -y -H -d 2 2>&1 > ./eggnog/nohup.out & #下载细菌数据库
+nohup download_eggnog_data.py -y -H -d 2157 2>&1 > ./eggnog/nohup.out & #下载古菌数据库
+nohup download_eggnog_data.py -y -H -d 10239 2>&1 > ./eggnog/nohup.out & #下载病毒数据库
+
+# 验证安装
+emapper.py -v
