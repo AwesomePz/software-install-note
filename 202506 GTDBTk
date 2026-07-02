@@ -1,0 +1,43 @@
+# 外网 2025.6
+# 官网下载：https://ecogenomics.github.io/GTDBTk/installing/bioconda.html
+# 参考下载1：https://juejin.cn/post/7295613501342269459
+# 参考下载2：https://blog.csdn.net/zrc_xiaoguo/article/details/134555869
+# 使用教程：https://ecogenomics.github.io/GTDBTk/
+
+cd software/
+mamba create -n gtdbtk -c conda-forge -c bioconda gtdbtk=2.4.1
+mamba activate gtdbtk
+mamba install axel
+
+# 方法1
+cd /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/gtdbtk/share/gtdbtk-2.4.1/db
+nohup axel -n 10 -v "https://data.gtdb.ecogenomic.org/releases/release226/226.0/auxillary_files/gtdbtk_package/full_package/gtdbtk_r226_data.tar.gz" > nohup.out 2>&1 & #可以连接澳大利亚vpn下载split到本地后再传输至linux
+cp gtdbtk_r226_data.tar.gz gtdbtk_r226_data.tar.gz2
+md5sum gtdbtk_r226_data.tar.gz #和官网https://ecogenomics.github.io/GTDBTk/installing/index.html#installing-gtdbtk-reference-data比对，检查有没有问题
+tar -xvzf gtdbtk_r226_data.tar.gz
+
+# 方法2
+cd /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/gtdbtk/bin/
+cp download-db.sh download-db.sh2
+vim download-db.sh
+# download-db.sh的修改内容如下
+1. 把第25行的“wget $DB_URL -O "$TARGET_TAR"”注释掉
+2. 并在下面一行添加axel -n 10 -v $DB_URL -o "$TARGET_TAR"
+3. 把第33行的“rm "$TARGET_TAR"”注释掉
+##
+nohup download-db.sh > /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/gtdbtk/share/gtdbtk-2.4.1/db/nohup.out 2>&1 &
+
+# 方法3（推荐）
+cd /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/gtdbtk/share/gtdbtk-2.4.1/db
+nohup wget -c "ftp://download.nmdc.cn/tools/meta/gtdb/gtdbtk_r226_data.tar.gz" 2>&1 > nohup.out &
+md5sum gtdbtk_r226_data.tar.gz #和官网https://ecogenomics.github.io/GTDBTk/installing/index.html#installing-gtdbtk-reference-data比对，检查有没有问题
+tar -xvzf gtdbtk_r226_data.tar.gz
+
+conda env config vars set -n gtdbtk GTDBTK_DATA_PATH="/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/gtdbtk/share/gtdbtk-2.4.1/db/release226/" #不要用mamba
+vim dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/gtdbtk/lib/python3.13/site-packages/gtdbtk/markers.py
+# 将第366行的“masked_seq = list_masked_seq.tostring().decode('utf-8')”修改为以下内容
+masked_seq = list_masked_seq.tobytes().decode('utf-8')
+##
+
+# 验证安装
+gtdbtk check_install
