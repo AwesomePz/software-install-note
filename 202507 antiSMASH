@@ -1,0 +1,14 @@
+# 外网 2025.7
+# 官网下载：https://docs.antismash.secondarymetabolites.org/install/
+# 参考下载：https://blog.csdn.net/qq_47054630/article/details/132100417
+
+cd software/
+mamba env create -n antismash
+mamba activate antiasmash
+mamba install -c conda-forge biopython=1.81
+mamba install -c conda-forge antismash
+download-antismash-databases #下载数据库，如果下载较慢可以重新运行试试
+antismash --prepare-data
+
+# 验证安装
+antismash --check-prereqs
