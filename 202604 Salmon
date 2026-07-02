@@ -1,0 +1,6 @@
+# 2026.4
+# 官网下载：https://github.com/COMBINE-lab/salmon
+# 使用教程：https://salmon.readthedocs.io/en/latest/index.html
+
+cd software/
+mamba install -c bioconda -c conda-forge salmon
