@@ -1,0 +1,14 @@
+# 外网 2025.6
+# 官网下载：https://github.com/conda-forge/miniforge
+
+cd software/
+wget -c https://github.com/conda-forge/miniforge/relearses/latest/download/Miniforge3-$(uname)-$(uname -m).sh
+bash Miniforge3-Linux-x86_64.sh -p /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba
+mv Miniforge3-Linux-x86_64.sh ./mamba
+source ~/.bashrc
+
+# 验证安装
+mamba --version
+
+# 卸载mamba
+conda uninstall mamba
