@@ -1,0 +1,4 @@
+# 2026.4
+# 官网下载：https://github.com/bbuchfink/diamond/wiki/2.-Installation
+
+mamba install -c bioconda -c conda-forge diamond
