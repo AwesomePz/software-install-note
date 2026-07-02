@@ -1,0 +1,157 @@
+# 外网 2025.6
+# 搭载环境：python_v3.7 + cuda_v11.3.0 + cudnn_v8.7.9 + pytorch_v1.12.1
+# 官网下载cuda：https://developer.nvidia.com/cuda-toolkit-archive
+# 官网下载cudnn：https://developer.nvidia.com/rdp/cudnn-archive
+# 官网下载esmfold：https://github.com/facebookresearch/esm?tab=readme-ov-file#quickstart
+# 参考下载cuda：https://blog.csdn.net/qq_35082030/article/details/110387800
+# 参考下载cuda+cudnn：https://blog.csdn.net/K_wenry/article/details/138350564
+# 参考下载cuda+cudnn+pytorch：https://blog.csdn.net/a121199/article/details/140506417
+# 参考下载esmfold 1：https://blog.csdn.net/qq_41025456/article/details/146318687
+# 参考下载esmfold 2：https://blog.csdn.net/weixin_40192882/article/details/136178381?ops_request_misc=%257B%2522request%255Fid%2522%253A%252276332e50265c761077c60d276c14c56c%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=76332e50265c761077c60d276c14c56c&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~blog~top_positive~default-1-136178381-null-null.nonecase&utm_term=ESMfold&spm=1018.2226.3001.4450
+# 参考下载esmfold 3：https://blog.csdn.net/weixin_52004233/article/details/140044303
+
+mamba env create -n esmfold
+mamba activate esmfold
+
+# 下载cuda
+cd software/
+mkdir cuda
+cd cuda/
+# 查看系统信息
+nvidia-smi #查看可安装cuda的最高版本（表格右上角）
+cat /proc/version #查看当前操作系统版本信息，如输出“Linux version 4.18.0-513.5.1.el8_9.x86_64 (mockbuild@iad1-prod-build001.bld.equ.rockylinux.org) (gcc version 8.5.0 20210514 (Red Hat 8.5.0-20) (GCC)) #1 SMP Fri Nov 17 03:31:10 UTC 2023”，那么操作系统版本就是Red Hat 8.5.0-20，内核是4.18.0-513
+uname -u #查看系统架构
+wget https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/cuda_11.3.0_465.19.01_linux.run #此处网址替换为https://developer.nvidia.com/cuda-toolkit-archive上的链接，依据cuda可安装的最高版本(建议安装v11.3)，以及系统架构和系统版本选择安装，如Linux--x86_64--RHEL--8--runfile（local）
+sh cuda_11.3.0_465.19.01_linux.run
+# sh运行中的操作
+1. 输入accept表示接受协议
+2. 只选择安装CUDA Toolkit，其他的通过Enter键可以取消
+3. 滑动至Option并按Enter键，回车Toolkit Option，回车Change Toolkit Install Path，修改目录路径为/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cuda并按Enter键，回车Done
+4. 回车Library install path，修改目录路径为/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cuda并按Enter键，回车Done
+5. 回车Install
+如出现以下字符则安装成功，
+Driver: Not Selected
+Toolkit: Installed in /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cuda/
+##
+vim ~/.bashrc
+# 在最后添加，
+# CUDA Toolkit
+export CUDA_HOME=/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cuda/
+export PATH="/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cuda/bin:$PATH"
+export LD_LIBRARY_PATH="/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cuda/lib64:$LD_LIBRARY_PATH"
+##
+source ~/.bashrc
+
+# 下载cudnn
+在https://developer.nvidia.com/rdp/cudnn-archive上下载对应版本至本地电脑，通过FileZilla传输至Linux
+cd software/
+mkdir cudnn
+cd cudnn/
+cp /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cudnn/include/cudnn.h /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cuda/include/
+cp /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cudnn/lib/libcudnn* dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/cuda/lib64/
+
+# 验证安装
+nvcc -V
+
+# 下载python
+mamba install -c conda-forge python=3.7
+
+# 下载esmfold
+cd software/
+mkdir esmfold
+cd esmfold/
+mamba install -c conda-forge \
+  setuptools=59.5.0 \
+  openmm=7.5.1 \
+  pdbfixer \
+  einops=0.6.1 \
+  fairscale \
+  omegaconf \
+  hydra-core \
+  pandas \
+  pytest
+mamba install -c bioconda \
+  hmmer=3.3.2 \
+  hhsuite=3.3.0 \
+  kalign2=2.04
+pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113 #依据https://pytorch.org/get-started/previous-versions/安装对应cuda版本的pytorch 1.12.1
+
+# 验证安装
+python
+import torch
+print("torch:",torch.__version__) #打印torch版本号,输出结果为torch: 1.12.1+cu113
+print("GPU:",torch.cuda.is_available()) #cuda是否可用,输出结果为GPU: True
+print(torch.cuda.current_device()) #返回cuda编号,输出结果为0
+print(torch.version.cuda) #打印cuda版本号,输出结果为11.3
+print(torch.backends.cudnn.version()) #输出结果为4个数字
+x = torch.rand(5,3)
+print(x) #输出一个5行3列的表格
+
+# (续)
+pip install \
+  -i https://pypi.tuna.tsinghua.edu.cn/simple \
+  biopython==1.79 \
+  deepspeed==0.5.9 \
+  dm-tree==0.1.6 \
+  ml-collections==0.1.0 \
+  numpy==1.21.2 \
+  PyYAML==5.4.1 \
+  requests==2.26.0 \
+  scipy==1.7.1 \
+  tqdm==4.62.2 \
+  typing-extensions==3.10.0.2 \
+  pytorch_lightning==1.5.10 \
+  wandb==0.12.21 \
+  biotite==0.39.0 \
+  matplotlib \
+  joblib
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple git+https://github.com/facebookresearch/esm.git
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple "fair-esm[esmfold]"
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple 'dllogger @ git+https://github.com/NVIDIA/dllogger.git'
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple 'openfold @ git+https://github.com/aqlaboratory/openfold.git@4b41059694619831a7db195b7e0988fc4ff3a307'
+# 运行pip会提示错误，但依据报错信息最后一段的“Running command”运行下一步命令，如下
+git clone --filter=blob:none --quiet https://github.com/aqlaboratory/openfold.git
+cd openfold/
+git rev-parse -q --verify 'sha^4b41059694619831a7db195b7e0988fc4ff3a307'
+git fetch -q https://github.com/aqlaboratory/openfold.git 4b41059694619831a7db195b7e0988fc4ff3a307
+git checkout -q 4b41059694619831a7db195b7e0988fc4ff3a307
+less setup.py #检查setup一段的version='1.0.0'
+pip install -e .
+# 运行pip会提示错误“error: metadata-generation-failed”,可能是错的,不要太参考
+mamba uninstall mkl
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple mkl==2018
+##
+pip install -e .
+
+# 测试
+cd esmfold/
+vim reproduce.py
+# 将以下内容保存至reproduce.py
+import torch
+import esm
+
+model = esm.pretrained.esmfold_v1() #model的下载路径 /home/zengpeiyun/.cache/torch/hub/checkpoints/
+model = model.eval().cuda()
+
+# Optionally, uncomment to set a chunk size for axial attention. This can help reduce memory.
+# Lower sizes will have lower memory requirements at the cost of increased speed.
+# model.set_chunk_size(128)
+
+sequence = "MKTVRQERLKSIVRILERSKEPVSGAQLAEELSVSRQVIVQDIAYLRSLGYNIVATPRGYVLAGG"
+# Multimer prediction can be done with chains separated by ':'
+
+with torch.no_grad():
+    output = model.infer_pdb(sequence)
+
+with open("result.pdb", "w") as f:
+    f.write(output)
+
+import biotite.structure.io as bsio
+struct = bsio.load_structure("result.pdb", extra_fields=["b_factor"])
+print(struct.b_factor.mean())  # this will be the pLDDT
+# 88.3
+##
+python reproduce.py #输出结果保存为result
+
+# 卸载cuda
+sh /decllfsqd2/ST_OCEAN/USER/zengpeiyun/software/cuda/bin/cuda-uninstaller
