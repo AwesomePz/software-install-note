@@ -1,0 +1,57 @@
+# 外网 2025.8
+# 官网下载：https://github.com/rrwick/Autocycler
+
+cd software/
+vim environment.yml
+# 将以下内容添加至environment.yml
+name: autocycler
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - autocycler>=0.5.0            # https://github.com/rrwick/Autocycler
+  - canu>=2.3                    # https://github.com/marbl/canu
+  - filtlong>=0.2.1              # https://github.com/rrwick/Filtlong
+  - flye>=2.9.6                  # https://github.com/mikolmogorov/Flye
+#  - lja>=0.2                     # https://github.com/AntonBankevich/LJA
+  - metamdbg>=1.0                # https://github.com/GaetanBenoitDev/metaMDBG
+  - miniasm>=0.3                 # https://github.com/lh3/miniasm
+  - minimap2>=2.28               # https://github.com/lh3/minimap2
+  - minipolish>=0.2.0            # https://github.com/rrwick/Minipolish
+  - myloasm>=0.1.0               # https://github.com/bluenote-1577/myloasm
+  - necat>=0.0.1_update20200803  # https://github.com/xiaochuanle/NECAT
+  - nextdenovo>=2.5.2            # https://github.com/Nextomics/NextDenovo
+  - nextpolish>=1.4.1            # https://github.com/Nextomics/NextPolish
+  - parallel>=20160622           # https://www.gnu.org/software/parallel/
+  - plassembler>=1.8.0           # https://github.com/gbouras13/plassembler
+  - racon>=1.5.0                 # https://github.com/lbcb-sci/racon
+  - raven-assembler>=1.8.3       # https://github.com/lbcb-sci/raven
+  - seqtk>=1.5                   # https://github.com/lh3/seqtk
+  - wtdbg>=2.5                   # https://github.com/ruanjue/wtdbg2
+##
+mamba env create --file environment.yml --name autocycler
+mamba activate autocycler
+mv environment.yml /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/autocycler/ && cd /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/autocycler/
+wget -c https://github.com/Nextomics/NextPolish/releases/download/v1.4.1/NextPolish.tgz
+pip install paralleltask
+tar -xvzf NextPolish.tgz && cd NextPolish && make
+mv NextPolish.tgz NextPolish
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/autocycler/NextPolish/nextPolish /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/autocycler/bin/
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/autocycler/NextPolish/bin/* /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/autocycler/bin/
+cd .. && mkdir plassembler_db
+下载https://zenodo.org/records/10158040/files/201123_plassembler_v1.5.0_databases.tar.gz?download=1并传输至linux
+md5sum 201123_plassembler_v1.5.0_databases.tar.gz #与https://zenodo.org/records/10158040的md5对比
+tar xvzf 201123_plassembler_v1.5.0_databases.tar.gz  --strip-components=1 -C plassembler_db/
+mv 201123_plassembler_v1.5.0_databases.tar.gz plassembler_db/
+下载https://github.com/rrwick/Autocycler/blob/main/pipelines/Automated_Autocycler_Bash_script_by_Ryan_Wick/autocycler_full.sh和https://github.com/rrwick/Autocycler/blob/main/pipelines/Auto-Autocycler_by_Tom_Stanton/autoautocycler.sh，并传输至linux
+chmod 775 autocycler*.sh
+sed -i 's/8h/28800/g' autocycler_full.sh
+vim ~/.bashrc
+# 将以下内容添加至~/.bashrc
+# Autocycler
+alias autocycler_full.sh="/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/autocycler/autocycler_full.sh"
+alias autocycler.sh="/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/autocycler/autocycler.sh"
+##
+
+# 测试安装
+https://github.com/rrwick/Autocycler/wiki/Demo-dataset
