@@ -1,0 +1,18 @@
+# 外网 2025.8
+# 官网下载：https://github.com/ablab/spades?tab=readme-ov-file
+
+cd software/
+wget -c https://github.com/ablab/spades/releases/download/v4.2.0/SPAdes-4.2.0-Linux.tar.gz
+mamba env create -n spades -y python=3.8
+mamba activate spades
+tar -xvzf SPAdes-4.2.0-Linux.tar.gz && mv SPAdes-4.2.0-Linux spades
+mv SPAdes-4.2.0-Linux.tar.gz spades/
+vim ~/.bashrc
+# 将以下内容添加至~/.bashrc
+# SPAdes
+export PATH=/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/spades/bin/:$PATH
+##
+source ~/.bashrc
+
+# 验证安装
+spades.py --test
