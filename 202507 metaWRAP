@@ -1,0 +1,77 @@
+# 外网 2025.7
+# 官网下载：https://github.com/bxlab/metaWRAP
+# 参考下载：https://zhuanlan.zhihu.com/p/662882507
+
+cd software/
+mamba env create -n metawrap -y python=2.7
+mamba activate metawrap
+git clone https://github.com/bxlab/metaWRAP.git metawrap
+cd metawrap/
+vim ~/.bashrc
+# 将以下内容添加至~/.bashrc
+# metaWRAP
+export PATH=/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/metawrap/bin/:$PATH
+##
+source ~/.bashrc
+conda config --add channels defaults
+conda config --add channels conda-forge
+conda config --add channels bioconda
+conda config --add channels ursky
+mamba install --channel ursky metawrap-mg=1.3.2 --no-channel-priority
+
+# 下载数据库，具体装配方式见https://github.com/bxlab/metaWRAP/blob/master/installation/database_installation.md
+mkdir db && cd db/
+
+# checkm2
+mkdir checkm2
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/drep/checkm2/CheckM2_database/uniref100.KO.1.dmnd /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/metawrap/db/checkm2
+checkm data setRoot /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/metawrap/db/checkm2/
+# 如果报错“ImportError: No module named _sysconfigdata_x86_64_conda_linux_gnu”，解决方法如下
+find /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/metawrap/ -name _sysconfigdata_x86_64_conda*_linux_gnu.py
+cp /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/metawrap/lib/python2.7/_sysconfigdata_x86_64_conda_cos6_linux_gnu.py /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/metawrap/lib/python2.7/_sysconfigdata_x86_64_conda_linux_gnu.py
+
+# kraken2
+mkdri kraken2 & cd kraken2
+mamba deactivate 
+mamba activate aria2
+# 以下操作在aria2环境中进行
+nohup aria2c -x 16 -s 16 -c https://genome-idx.s3.amazonaws.com/kraken/k2_standard_20250402.tar.gz &
+wget -c https://genome-idx.s3.amazonaws.com/kraken/standard_20250402/standard.md5
+mamba deactivate
+##
+mamba activate metawrap
+md5sum k2_standard_20250402.tar.gz #比对md5
+tar xvzf k2_standard_20250402.tar.gz
+##
+kraken2-inspect -db dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/metawrap/db/kraken2 | head -6 #检查库完整性，和https://benlangmead.github.io/aws-indexes/k2中standard的inspect.txt比较
+
+# 下载ncbi_tax
+mkdir ncbi_tax
+cd ncbi_tax
+lftp ftp.ncbi.nlm.nih.gov/pub/taxonomy
+# 以下是lftp的操作内容
+get taxdump.tar.gz
+exit
+##
+tar -xvf taxdump.tar.gz
+
+# 下载ncbi_nt
+mkdir ncbi_nt
+cd  ncbi_nt
+lftp ftp.ncbi.nlm.nih.gov/blast/db/v4/
+# 以下是lftp的操作内容
+set pget:default-n 10
+mget -c nt_v4.*.tar.gz #实测mirro比get准确率高好多
+exit
+##
+find . -type f -name "*.tar.gz" -exec md5sum {} + > md5sums.txt #检查对应的md5
+for a in nt_v4.*.tar.gz; do tar xzf $a; done
+mkdir tar
+mv nt_v4.*.tar.gz md5sum.txt tar
+
+which config-metawrap
+vim dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/metawrap/bin/config-metawrap #刚刚config-metawrap的输出路径 #将kraken2、ncbi_nt、ncbi_tax数据库对应的路径添加进去
+source dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/metawrap/bin/config-metawrap
+
+# 验证安装
+metawrap -h
