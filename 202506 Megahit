@@ -1,0 +1,7 @@
+# 外网 2025.6
+# 官网下载：https://github.com/voutcn/megahit
+
+mamba install -c bioconda megahit
+
+# 验证安装
+megahit –v
