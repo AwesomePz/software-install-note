@@ -1,0 +1,407 @@
+# 外网 2025.8
+# 官网下载：https://github.com/rrwick/Trycycler
+
+cd software/
+mamba env create -n trycycler python=3.8
+mamba activate trycycler
+git clone https://github.com/rrwick/Trycycler.git trycycler
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple ./trycycler
+
+cd trycycler/
+mkdir requirements && cd requirements/
+# 下载minimap2和miniasm
+mamba install -c conda-forge minimap2=2.28
+git clone https://github.com/lh3/miniasm  && (cd miniasm  && make)
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/miniasm/miniasm /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/miniasm/minidot /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+
+# 下载mash
+mamba install -c conda-forge mash
+
+# 下载R
+mamba install -c conda-forge r-base r-ape r-igraph r-phangorn
+R
+# 以下在R中操作
+library(ape)
+library(phangorn)
+q()
+##
+
+# 下载muscle
+wget -c https://drive5.com/muscle/downloads3.8.31/muscle3.8.31_i86linux64.tar.gz
+tar xvzf muscle3.8.31_i86linux64.tar.gz && mv muscle3.8.31_i86linux64 muscle
+rm muscle3.8.31_i86linux64.tar.gz
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/muscle /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+
+# 下载canu
+curl -LRO https://github.com/marbl/canu/releases/download/v2.3/canu-2.3.Linux-amd64.tar.xz
+md5sum canu-2.3.Linux-amd64.tar.xz
+tar -xJf canu-2.3.*.tar.xz && mv canu-2.3 canu
+mv canu-2.3.Linux-amd64.tar.xz canu
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/canu/bin/* /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+
+# 下载flye
+git clone https://github.com/fenderglass/Flye flye
+cd flye
+make
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/flye/bin/* /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+
+# 下载minipolish
+git clone --recursive https://github.com/lbcb-sci/racon.git racon
+cd racon
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/racon/build/bin/* /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+cd ../..
+git clone https://github.com/rrwick/Minipolish.git minipolish
+pip3 install ./minipolish
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/minipolish/miniasm_and_minipolish.sh /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+
+# 下载raven
+mamba install -c bioconda raven-assembler
+
+# 下载filtlong
+git clone https://github.com/rrwick/Filtlong.git filtlong
+cd filtlong
+make -j
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/filtlong/bin/filtlong /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+cd ..
+
+# 下载any2fasta
+mamba install -c conda-forge any2fasta
+
+# 下载fastp
+mamba install -c conda-forge fastp
+
+# 下载seqtk
+mamba install -c conda-forge seqtk
+
+# 下载bowtie2
+mamba install -c conda-forge bowtie2
+
+# 下载bwa
+git clone https://github.com/lh3/bwa.git
+cd bwa; make
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/bwa/bwa /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/bwa/qualfa2fq.pl /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/bwa/xa2multi.pl /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+cd ..
+
+# 下载ropebwt2
+mamba install -c conda-forge ropebwt2
+
+# 下载fmlrc2
+mamba install -c conda-forge fmlrc2
+
+# 下载masurca
+mamba install -c conda-forge masurca
+
+# 下载medaka
+mamba install -c conda-forge -c nanoporetech -c bioconda medaka
+
+# 下载necat
+wget -c https://github.com/xiaochuanle/NECAT/releases/download/v0.0.1_update20200803/necat_20200803_Linux-amd64.tar.gz
+tar xvzf necat_20200803_Linux-amd64.tar.gz && mv NECAT necat
+mv necat_20200803_Linux-amd64.tar.gz necat
+cd necat/Linux-amd64/bin
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/necat/Linux-amd64/bin/* /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+
+# 下载nthits
+mamba install -c conda-forge nehits
+
+# 下载polypolish
+mamba install -c conda-forge polypolish
+
+# 下载prodigal
+mamba install -c conda-forge polypolish
+
+# 下载samtools
+mamba install -c conda-forge samtools=1.21
+
+# 下载shasta
+mamba install -c conda-forge shasta
+
+# 下载pypolca
+mamba install -c conda-forge pypolca
+
+# 下载barrnap
+mamba install -c conda-forge barrnap
+
+vim CheckCircularity.Modify.YL.V1.pl 
+# 将以下内容添加至CheckCircularity.Modify.YL.V1.pl 
+#!/usr/bin/env perl
+
+use strict;
+use Getopt::Long;
+# use Data::Dump qw(dump);
+
+my $debug = 0;
+my $flag_force = 0;
+# Maximum Read Length. We assume that no reads are longer than this (bp).
+my $param_max_read_len = 100000;
+# We assume that a circular chromosome must yield a contig whose ends
+# overlap longer than this length (bp) and more identical than this match ratio.
+my $param_min_overlap_len = 3000;
+my $param_min_overlap_match_ratio = 0.95;
+# When the match ratio of the overlap is lower than this, show a warning. (This aims at not missing potential overlaps)
+my $param_alert_overlap_match_ratio = 0.90;
+# Circular chromosomes (a contig whose ends overlap) may have a region of
+# bad sequence quality at the both ends up to this length.
+my $param_max_overlap_hang_len = 50000;
+my $blastn;
+GetOptions(
+  "force"               => \$flag_force,
+  "blastn=s"		=> \$blastn,
+  "max_read_len=i"      => \$param_max_read_len,
+  "min_overlap_len=i"   => \$param_min_overlap_len,
+  "min_overlap_ratio=f" => \$param_min_overlap_match_ratio,
+  "alt_overlap_ratio=f" => \$param_alert_overlap_match_ratio,
+  "max_hang_len=i"      => \$param_max_overlap_hang_len,
+  "debug"               => \$debug
+);
+
+my $input_fasta_file_name = shift;
+my $temporary_directory_name = shift;
+unless(defined $input_fasta_file_name && defined $temporary_directory_name) {
+	print STDERR "Usage: check_circurarity.pl <input FASTA (assembly)> <temporary dir> [option]\n";
+	print STDERR "       -max_read_len<i>		Maximum Read Length,default=100000.\n";
+	print STDERR "       -min_overlap_len<i>	Min overlap length,default=3000.\n";
+	print STDERR "       -min_overlap_ratio<f>	Min match ratio,default=0.95.\n";
+	print STDERR "       -alt_overlap_ratio<f>	Alternative min match ratio.,default=0.90\n";
+	print STDERR "       -max_hang_len<i>		A region of bad sequence quality at the both ends up to this length,default=50000.\n";
+	print STDERR "       -force			Remove the entire directory and start from scratch.\n";
+	print STDERR "       -blastn<f>			Blast bin pathway,default=/usr/bin/blastn\n";
+	print STDERR "       -debug			Print process log info\n";
+	exit 0;
+}
+die "blastn program not find $blastn \n" unless -e $blastn;
+
+if(-e $temporary_directory_name) {
+	if($flag_force) {
+		print STDERR "WARNING: '$temporary_directory_name' already exists, but you gave --force option.\n";
+		print STDERR "         We remove the entire directory and start from scratch.\n";
+		`rm -rf "$temporary_directory_name"`;
+		if($?) {
+			print STDERR "ERROR: $temporary_directory_name could not be removed.\n";
+			exit 1;
+		}
+	} else {
+		print STDERR "ERROR: '$temporary_directory_name' already exists. We abort for safety.\n";
+		print STDERR "       If you wish to remove the directory (and the things in it), and start from scratch,\n";
+		print STDERR "       you can give '--force' to do that, but use it carefully.\n";
+		exit 1;
+	}
+}
+mkdir $temporary_directory_name or die "ERROR: We could not create '$temporary_directory_name'.";
+sub split_fasta_into_separate_fasta{
+	my ($fasta, $dir) = @_;
+	my @array_of_sequence_name_and_its_length = ();
+	open my $fh, "<", $input_fasta_file_name or die "ERROR: We could not open '$input_fasta_file_name' for input";
+	my $ofh;
+	my $current_sequence_name = undef;
+	while(<$fh>) {
+		chomp; chop if(/\r$/);
+		if(m|^>(\S+)|) {
+			my $sequence_name = $1;
+			if(defined $current_sequence_name) { close $ofh; }
+			$current_sequence_name = $sequence_name;
+			$current_sequence_name =~ s|[^\w\d_ -]||g;
+			my $output_file_name = "$dir/$current_sequence_name.fa";
+			push(@array_of_sequence_name_and_its_length, {seq_name => $current_sequence_name, len => 0, file_name => $output_file_name});
+			open $ofh, ">", $output_file_name or die "ERROR: Could not open '$output_file_name' for output";
+			print $ofh ">$current_sequence_name\n";
+		} else {
+			s|[^ACGT]||ig;
+			my $l = length($_);
+			if(0 < $l) {
+				$array_of_sequence_name_and_its_length[-1]->{len} += $l;
+				print $ofh "$_\n";
+			}
+		}
+  	}
+	if(defined $current_sequence_name) { close $ofh; }
+	close $fh;
+	return @array_of_sequence_name_and_its_length;
+}
+
+sub output_with_folding{
+	my ($fh, $seq) = @_;
+	my $l = length($seq);
+	my $t = 70;
+	for(my $i = 0; $i < $l; ) {
+		my $tl = $l - $i; if($t < $tl) { $tl = $t; }
+		print $fh substr($seq, $i, $tl), "\n";
+		$i += $tl;
+	}
+}
+
+open Stat,">$temporary_directory_name/Cir.stat.xls";
+my @sequence_objects = split_fasta_into_separate_fasta($input_fasta_file_name, $temporary_directory_name);
+for my $seq_obj (@sequence_objects) {
+	my $command_line = "$blastn -task megablast -subject $seq_obj->{file_name} -query $seq_obj->{file_name} -evalue 1e-100 -outfmt 7";
+	my @results;
+	unless($seq_obj->{len} < $param_max_read_len * 2) {
+		my $end_query_pos = $param_max_read_len - 1;
+		my $start_subj_pos = $seq_obj->{len} - $param_max_read_len + 1;
+		$command_line .= " -subject_loc $start_subj_pos-$seq_obj->{len} -query_loc 1-$end_query_pos";
+	}
+	print STDERR "\$ $command_line\n" if($debug > 0);
+	open OUT,">$seq_obj->{file_name}.blast.xls";
+	print OUT "#",$command_line,"\n";
+	@results = `$command_line`;
+	print @results if($debug > 0);
+	my $is_circular = 0;
+	my $preserve_pos_from_here_0origin;
+	my $preserve_pos_to_here_0origin;
+	my $comment;
+	for(@results) {
+		print OUT $_;
+		chomp; chop if(/\r$/);
+		next if(m/^#/);
+		# Fields: query id, subject id, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
+		my ($query_id, $subj_id, $ident_percent, $align_len, $mismatches, $gap_opens, $qstart, $qend, $sstart, $send, $evalue, $bit_score) = split(/\t/);
+		next if($qstart == $sstart && $qend == $send);
+		next if($align_len < $param_min_overlap_len);
+		next if($ident_percent < $param_alert_overlap_match_ratio * 100.0);
+		print STDERR "  len=$seq_obj->{len} [$qstart-$qend] => [$sstart-$send]\n" if($debug);
+		if($ident_percent < $param_min_overlap_match_ratio * 100.0) {
+			unless($is_circular) {
+			$comment = "Possibly circular. [$qstart-$qend] matches [$sstart-$send] with $ident_percent\% identity.";
+			}
+		} else {
+			#if($qstart <= $param_max_overlap_hang_len && $seq_obj->{len} - $param_max_overlap_hang_len <= $send){
+			if($qstart <= $param_max_overlap_hang_len && $seq_obj->{len} - $param_max_overlap_hang_len <= $send && $sstart > $qstart  && $sstart >$qend ) {
+				$comment = "[$qstart-$qend] matches [$sstart-$send] with $ident_percent\% identity.";
+				$is_circular = 1;
+				if($qstart > $qend){
+					$preserve_pos_from_here_0origin = $qend -1 ;
+				}else{
+					$preserve_pos_from_here_0origin = $qstart - 1;
+				}
+				if($sstart >$send){
+					$preserve_pos_to_here_0origin   = $send - 1;
+				}else{
+					$preserve_pos_to_here_0origin   = $sstart - 1;
+				}
+			#	print "[$qstart-$qend] matches [$sstart-$send] with $ident_percent\% identity.\n";
+			}
+		}
+	}
+	close OUT;
+	print Stat "$seq_obj->{seq_name}\t" . ($is_circular ? "circular" : "linear") . "\t$comment\n";
+	if($is_circular) {
+		my $fname = $seq_obj->{file_name} . ".cut.fa";
+		my $fname2 = $seq_obj->{file_name} . ".cut_halfrot.fa";
+		open my $ifh, "<", $seq_obj->{file_name} or die "ERROR: Could not open '$seq_obj->{file_name}'.";
+		open my $ofh, ">", $fname or die "ERROR: Could not open '$fname'";
+		open my $ofh2, ">", $fname2 or die "ERROR: Could not open '$fname2'";
+		my $header = <$ifh>;
+		print $ofh $header;
+		print $ofh2 $header;
+		my @lines;
+		while(<$ifh>) {
+			chomp; chop if(/\r$/);
+			push(@lines, $_);
+		}
+		my $seq = join('', @lines);
+		my $cut_seq = substr($seq, $preserve_pos_from_here_0origin, $preserve_pos_to_here_0origin - $preserve_pos_from_here_0origin + 1);
+		output_with_folding($ofh, $cut_seq);
+		{
+			my $l = length($cut_seq);
+			my $first_half_len = int($l / 2);
+			output_with_folding($ofh2, substr($cut_seq, $first_half_len) . substr($cut_seq, 0, $first_half_len));
+		}
+	close $ifh;
+	close $ofh;
+	close $ofh2;
+	}
+}
+close Stat;
+##
+chmod 775 CheckCircularity.Modify.YL.V1.pl
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/CheckCircularity.Modify.YL.V1.pl /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+
+vim Circular_stat.pl
+# 将以下内容添加至Circular_stat.pl
+#!/usr/bin/perl -w
+use strict;
+use File::Basename;
+
+#======================================================
+my $usage = <<USAGE
+Usage:$0 <Sample> <circular state> <circular dir> <ourdir>
+USAGE
+die $usage if @ARGV != 4;
+#=======================
+my ($sample,$cir_stat,$cir_dir,$outdir) = @ARGV;
+my ($dir,$stat,$seq,@seq,%seq,%length,$length);
+open Stat,"$cir_stat" or die "Can't open $cir_stat ~~~\n";
+open OUT,">$outdir/$sample.Check.Circular.stat";
+open OUT1,">$outdir/$sample.OldID2NewID\n";
+print OUT1 "OldID\tNewID\n";
+$stat = "$sample\t";
+while(<Stat>){
+	chomp;
+	my @line = split /\s+/,$_;
+	if($line[1] =~ /linear/){
+		$seq = "$cir_dir/$line[0].fa";
+		$length = &Fasta($seq,"linear",\%seq);
+	}
+	if($line[1] =~ /circular/){
+		$seq = "$cir_dir/$line[0].fa.cut.fa";
+		$length = &Fasta($seq,"circular",\%seq);
+	}
+	#$stat .= "$line[0]\t$length\t$line[1]\n\t";
+}
+close(Stat);
+
+open ALL,">$outdir/$sample.Assembly.Circular.fasta";
+my ($seq_id,$seq_num,$tag,$pls_id,$pls_num);
+foreach my $id (sort {$length{$b} <=> $length{$a}} keys %length ){
+	($seq_id,$tag) =  (split /\s+/,$id);
+	$seq_num ++;
+	$seq_id = "Contig_$seq_num $tag";
+	print OUT1 "$id\t$seq_id\n";
+	print ALL ">",$seq_id,"\n",$seq{$id},"\n";
+	$stat .= "Contig_$seq_num:$tag:$length{$id};";
+}
+chop($stat);
+$stat .= "\t$outdir/$sample.Assembly.Circular.fasta\n";
+print OUT $stat;
+close(ALL);
+close OUT1;
+#==================
+sub Fasta{
+        my ($file,$tag) = @_;
+        my ($id,$seq,$length);
+        open IN,"$file" or die "$file is not exist";
+        $/=">";
+        <IN>;
+        while(<IN>){
+                chomp;
+                my @line =split /\n/,$_;
+                $id = (split / /,$line[0])[0];
+		$id = "$id $tag";
+                shift @line;
+                $seq = join '',@line;
+                $seq{$id} = $seq;
+		$length  = length $seq;
+		$length{$id} = $length;
+        }
+        $/="\n";
+        close(IN);
+	return $length;
+}
+##
+chmod 775 Circular_stat.pl
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/Circular_stat.pl /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+
+# 下载blast+
+wget -c https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.17.0+-x64-linux.tar.gz
+tar xvzf ncbi-blast-2.17.0+-x64-linux.tar.gz && mv ncbi-blast-2.17.0+ blast+
+mv ncbi-blast-2.17.0+-x64-linux.tar.gz blast+/
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/trycycler/requirements/blast+/bin/* /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/trycycler/bin/
+
+# 下载mummer
+mamba install -c conda-forge mummer
