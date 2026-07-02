@@ -1,0 +1,7 @@
+# 2026.3
+# 官网下载：https://github.com/endixk/ezaai
+
+cd software/
+mamba env create -n ezaai python=3.12
+mamba activate ezaai
+mamba install -c bioconda ezaai
