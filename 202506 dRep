@@ -1,0 +1,115 @@
+# 外网 2025.6
+# 官网下载drep：https://drep.readthedocs.io/en/latest/installation.html#using-conda
+# 官网下载mummer：https://github.com/mummer4/mummer?tab=readme-ov-file
+# 官网下载ANIcalculator：https://ani.jgi.doe.gov/html/download.php?
+# 官网下载checkm2：https://github.com/chklovski/CheckM2
+# 参考下载mummer：https://zhuanlan.zhihu.com/p/572010609
+
+cd software/
+mamba env create -n drep -y python=3.12.11
+mamba activate drep
+pip install drep -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install networkx -i https://pypi.tuna.tsinghua.edu.cn/simple
+mamba install hmmer pplacer -y
+dRep check_dependencies #此时全部都是ERROR
+
+mkdir drep
+cd drep/
+# 下载mash
+mamba install -c bioconda mash
+
+# 验证安装
+mash --version
+
+# 下载mummer
+cd drep/
+mamba install -c conda-forge perl fig2dev xfig
+mkdir mummer
+wget -c https://github.com/mummer4/mummer/releases/download/v4.0.1/mummer-4.0.1.tar.gz
+tar -xvzf mummer-4.0.1.tar.gz --strip-components=1 -C mummer
+mv mummer-4.0.1.tar.gz mummer
+cd mummer/
+./configure --prefix=/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/drep/mummer
+make
+make install
+ln -s /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/drep/mummer/bin/* /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/envs/drep/bin/
+
+# 验证安装
+nucmer --version
+
+# 下载fastani
+mamba install -c bioconda fastani
+
+# 验证安装
+fastANI -v
+
+# 下载ANIcalculator
+cd drep/
+mkdir ANIcalculator
+wget -c https://ani.jgi.doe.gov/download_files/ANIcalculator_v1.tgz
+tar -xvzf ANIcalculator_v1.tgz --strip-components=1 -C ANIcalculator
+mv ANIcalculator_v1.tgz ANIcalculator
+cd ANIcalculator/
+vim ~/.bashrc
+# 将以下内容添加至~/.bashrc
+# ANIcalculator_v1
+export PATH=$PATH:/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/drep/ANIcalculator/
+export PATH=$PATH:/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/drep/ANIcalculator/ANIcalculator
+##
+source ~/.bashrc
+
+# 验证安装
+ANIcalculator -h
+
+# 下载prodigal
+mamba install -c bioconda prodigal
+
+# 验证安装
+prodigal -v
+
+# 验证安装
+checkm test ~/checkm_test_results
+
+# 下载checkm2
+cd drep/
+mkdir checkm2
+wget -c https://github.com/chklovski/CheckM2/archive/refs/tags/1.1.0.tar.gz #如果下载太慢可以先下载到本地然后传输至linux
+tar -xvzf 1.1.0.tar.gz --strip-components=1 -C checkm2
+mv 1.1.0.tar.gz checkm2
+cd checkm2
+mamba install -c conda-forge -c bioconda -c defaults \
+  scikit-learn=1.6.1 \
+  diamond=2.1.11 \
+  tensorflow=2.17 \
+  numpy=2.3.0 \
+  lightgbm \
+  pandas \
+  scipy \
+  prodigal=2.6.3 \
+  setuptools \
+  requests \
+  packaging \
+  tqdm #因为下载checkm2删除了fig2dev、jpeg、xfig，可能导致mummer无法使用
+python setup.py install
+wget -c https://zenodo.org/records/14897628 #下载DIAMOND数据库 #如果下载太慢可以先下载到本地然后传输至linux
+tar -xvzf checkm2*z --strip-components=1 -C CheckM2_database
+mv checkm2_database.tar.gz CheckM2_database
+vim ~/.bashrc
+# 将以下内容添加至~/.bashrc
+# checkM2
+export CHECKM2DB=/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/drep/checkm2/CheckM2_database/uniref100.KO.1.dmnd
+##
+source ~/.bashrc
+
+# 验证安装
+checkm2 testrun
+
+# 下载skani
+mamba install -c bioconda skani
+
+# 验证安装
+skani --version
+
+# 验证安装
+dRep check_dependencies #除checkm2和centrifuge外均为good
+which checkm2 #输出地址为PATH/TO/MAMABA/envs/drep/bin/checkm2
