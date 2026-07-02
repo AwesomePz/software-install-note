@@ -1,0 +1,6 @@
+# 外网 2025.7
+# 官网下载：https://github.com/aria2/aria2
+
+mamba env create -n aria2
+mamba activate aria2
+mamba install aria2
