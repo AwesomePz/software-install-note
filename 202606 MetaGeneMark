@@ -1,0 +1,19 @@
+# 外网 2025.6
+# 官网下载：http://topaz.gatech.edu/GeneMark/license_download.cgi
+# 参考下载：https://blog.csdn.net/weixin_49325129/article/details/141166869
+
+cd software/
+mkdir metagenemark
+cd metagenemark/
+在http://topaz.gatech.edu/GeneMark/license_download.cgi上选择MetaGeneMark v.3.38和LINUX 64，并填写信息，然后点击“I agree to the terms of this license agreement”，然后下载“here”和“64 bit”并解压，通过FileZilla将两个文件传输至Linux
+cp gm_key_64 ~/.gm_key_64
+vim ~/.bashrc
+# 将以下内容添加至~/.bashrc
+# MetaGeneMark_v3.38
+export PATH=/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/metagenemark/mgm/:$PATH
+export export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/mamba/lib
+##
+chmod 755 ./mgm/gmhmmp
+
+# 验证安装
+gmhmmp
