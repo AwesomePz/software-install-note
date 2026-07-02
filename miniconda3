@@ -1,0 +1,43 @@
+# 外网 2025.6
+# 官网下载：https://docs.anaconda.net.cn/miniconda/install/
+# 参考下载：https://beltxman.com/4079.html
+
+cd software/
+mkdir miniconda3 && cd miniconda3/
+wget -c https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b -u -p /dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/miniconda3
+source ./bin/activate
+./bin/conda init bash
+# 设置镜像源
+vim .condarc
+# conda config --show-sources 查看已安装的镜像源
+# conda config --remove-key channels 恢复默认源
+# 复制下列信息至.condarc中
+channels:
+  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/msys2/
+default_channels:
+  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  msys2: http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  bioconda: http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  menpo: http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch-lts: http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  simpleitk: http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+show_channel_urls: true
+offline: false
+ssl_verify: false
+##
+conda clean -i #清除索引缓存，保证用的是镜像站提供的索引
+
+# 验证安装
+conda --version
+
+# 卸载miniconda3
+conda deactivate # 您应该不再在终端提示符中看到 (base)
+/dellfsqd2/ST_OCEAN/USER/zengpeiyun/software/miniconda3/uninstall.sh
