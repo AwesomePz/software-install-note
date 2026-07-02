@@ -1,0 +1,9 @@
+# 外网 2025.6
+# 官网下载：https://github.com/OpenGene/fastp
+
+mamba env create -n fastp
+mamba activate fastp
+mamba install -c bioconda fastp
+
+# 验证安装
+fastp –v
